@@ -1,0 +1,128 @@
+/* PARA TODO EL PROGRAMA */
+
+/* Centrado del contenido de pagina */
+body {
+  margin: 0;
+  background-color: #0f172a; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Diseño de la tarjeta*/
+.card {
+  background-color: #1e293b; 
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px; 
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/* Título (EDU-STRATEGY) login */
+.titulo-logo {
+  color: #38bdf8;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Segundo titulo login */
+.subtitulo {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+/* Estilo para los letreros y los cuadros de texto */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Recuadros para imput*/
+.input-group input {
+  background-color: #1a2236;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  color: white;
+  font-size: 14px;
+}
+
+/* Que brille azul cuando estoy escribiendo dentro */
+.input-group input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+/* El botón "Iniciar Sesión" */
+.btn-submit {
+  grid-column: span 2;
+  width: 100%;
+  background-color: #38bdf8;
+  color: #0f172a;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: background 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #0ea5e9;
+}
+
+/* Los textos y links que van al final de la tarjeta login */
+.footer-links {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.enlace {
+  color: #64748b;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.enlace:hover { color: #38bdf8; }
+
+/* TARJETA REGISTRO (Para poner los datos en dos columnas) */
+
+/* Esto organiza los campos en parejas para que no sea mas organico el diseño*/
+.formulario-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
+  text-align: left;
+}
+
+/*
+    TARJETA LOGIN (Para que los cuadros ocupen todo el ancho)
+    */
+
+/* El correo y la clave no se dividan en dos columnas */
+.full-width { 
+  grid-column: span 2; 
+}
