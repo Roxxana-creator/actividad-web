@@ -126,7 +126,7 @@ INSERT INTO tipo_actividad (nombre, descripcion) VALUES
 -- Los valores aquí son solo ilustrativos para poblar la base de datos.
 INSERT INTO credencial (email, password_hash, rol) VALUES
     ('admin@edu-strategy.com', 'Admin2026', 'administrador'),
-    ('david@correo.edu.co', 'Admin2026', 'estudiante'),
+    ('Roxxana@correo.edu.co', 'Admin2026', 'estudiante'),
     ('tatiana@correo.edu.co', 'Admin2026', 'estudiante');
 
 
@@ -135,17 +135,17 @@ INSERT INTO administrador (id_credencial, nombre_completo) VALUES (1, 'Administr
 
 -- Estudiantes
 INSERT INTO estudiante (id_credencial, identificacion, nombre_completo, carrera, semestre_actual, fecha_ingreso) VALUES
-    (2, '1023925771', 'David Stiven Merchan Bustos', 'Ingeniería de Software', 7, '2022-01-15'),
+    (2, '1023925771', 'Roxxana Hoyos Anacona', 'Ingeniería de Software', 7, '2022-01-15'),
     (3, '1027521432', 'Tatiana Paola Walteros', 'Ingeniería de Sistemas', 7, '2022-01-15');
 
 
 -- Semestres
 INSERT INTO semestre (id_estudiante, nombre, fecha_inicio, fecha_fin, activo) VALUES
-    (1, '2026-1', '2026-01-20', '2026-06-15', TRUE),   -- semestre activo de David
+    (1, '2026-1', '2026-01-20', '2026-06-15', TRUE),   -- semestre activo de Roxxana
     (2, '2026-1', '2026-01-20', '2026-06-15', TRUE);   -- semestre activo de Tatiana
 
 
--- Asignaturas (semestre de David)
+-- Asignaturas (semestre de Roxxana)
 INSERT INTO asignatura (id_semestre, nombre, nombre_docente) VALUES
     (1, 'Proyecto de Software', 'Tatiana Cabrera'),
     (1, 'Bases de Datos', 'Carlos Mejía'),

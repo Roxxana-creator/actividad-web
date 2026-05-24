@@ -12,10 +12,53 @@ import {
   apiCrearSemestre,
 } from '../services/api';
 
+const asignaturasDemo = [
+  {
+    id: 1,
+    nombre: 'Base de Datos Avanzadas',
+    codigo: 'BDA',
+    docente: 'Dilsa Triana',
+    semestre: '2026-1',
+    hitos: 3,
+    nota: 4.5,
+    tiempo: 18,
+  },
+  {
+    id: 2,
+    nombre: 'Diseño de Aplicaciones Web',
+    codigo: 'DAW',
+    docente: 'Diana Toquica',
+    semestre: '2026-1',
+    hitos: 4,
+    nota: 4.2,
+    tiempo: 22,
+  },
+  {
+    id: 3,
+    nombre: 'Proyecto de Software',
+    codigo: 'PSW',
+    docente: 'Docente Proyecto',
+    semestre: '2026-1',
+    hitos: 5,
+    nota: 4.7,
+    tiempo: 30,
+  },
+  {
+    id: 4,
+    nombre: 'Arquitectura de Software',
+    codigo: 'ADS',
+    docente: 'Carlos Martínez',
+    semestre: '2026-1',
+    hitos: 2,
+    nota: 3.9,
+    tiempo: 14,
+  },
+];
+
 function Dashboard({ setPantalla, usuario, setUsuario }) {
   const [busqueda, setBusqueda] = useState('');
-  const [asignaturas, setAsignaturas] = useState([]);
-  const [semestre, setSemestre] = useState('');
+  const [asignaturas, setAsignaturas] = useState(asignaturasDemo);
+  const [semestre, setSemestre] = useState('2026-1');
   const [modalAbierto, setModalAbierto] = useState(false);
   const [semestreModalAbierto, setSemestreModalAbierto] = useState(false);
   const [hitoModalAbierto, setHitoModalAbierto] = useState(false);
@@ -24,8 +67,6 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
   const [loadingModal, setLoadingModal] = useState(false);
   const [vista, setVista] = useState('dashboard');
 
-  /* App.css pone body en display:flex para centrar las tarjetas de Login/Registro.
-     El Dashboard es full-page y no debe heredar ese centrado. */
   useEffect(() => {
     document.body.style.display = 'block';
     document.body.style.alignItems = 'unset';
@@ -40,16 +81,25 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
 
   useEffect(() => {
     const token = localStorage.getItem('edu_token');
+
     if (!token) {
       setPantalla('login');
       return;
     }
+
     apiFetchDashboard(token)
       .then((data) => {
-        setAsignaturas(data.asignaturas);
-        setSemestre(data.semestreActivo);
+        if (data?.asignaturas?.length > 0) {
+          setAsignaturas(data.asignaturas);
+        }
+
+        if (data?.semestreActivo) {
+          setSemestre(data.semestreActivo);
+        }
       })
-      .catch(() => setPantalla('login'));
+      .catch((err) => {
+        console.error('Error cargando dashboard:', err);
+      });
   }, [setPantalla]);
 
   const totalAsignaturas = asignaturas.length;
@@ -75,6 +125,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
 
   const maxTiempo =
     asignaturas.length > 0 ? Math.max(...asignaturas.map((a) => a.tiempo)) : 1;
+
   const alturaTiempo = (tiempo) => Math.round((tiempo / maxTiempo) * 140);
   const alturaNota = (nota) => Math.round((nota / 5.0) * 140);
 
@@ -85,6 +136,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
   };
 
   const nombreUsuario = usuario?.nombre_completo ?? 'Estudiante';
+
   const inicialesUsuario = usuario?.nombre_completo
     ? usuario.nombre_completo
         .split(' ')
@@ -93,6 +145,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
         .slice(0, 2)
         .toUpperCase()
     : '?';
+
   const semestreActivo = semestre || '2026-1';
 
   const handleAbrirCrear = () => {
@@ -107,6 +160,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
 
   const handleGuardar = async (datos) => {
     setLoadingModal(true);
+
     try {
       if (asignaturaEditando) {
         const actualizada = await apiActualizarAsignatura(
@@ -116,6 +170,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
             docente: datos.docente,
           }
         );
+
         setAsignaturas((prev) =>
           prev.map((a) =>
             a.id === asignaturaEditando.id
@@ -133,6 +188,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
           nombre: datos.nombre,
           docente: datos.docente,
         });
+
         setAsignaturas((prev) => [
           ...prev,
           {
@@ -147,6 +203,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
           },
         ]);
       }
+
       setModalAbierto(false);
     } catch (err) {
       alert(err.message);
@@ -157,6 +214,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
 
   const handleEliminar = async (id) => {
     if (!window.confirm('¿Seguro que deseas eliminar esta asignatura?')) return;
+
     try {
       await apiEliminarAsignatura(id);
       setAsignaturas((prev) => prev.filter((a) => a.id !== id));
@@ -167,13 +225,25 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
 
   const refreshDashboard = async () => {
     const token = localStorage.getItem('edu_token');
-    const data = await apiFetchDashboard(token);
-    setAsignaturas(data.asignaturas);
-    setSemestre(data.semestreActivo);
+
+    try {
+      const data = await apiFetchDashboard(token);
+
+      if (data?.asignaturas?.length > 0) {
+        setAsignaturas(data.asignaturas);
+      }
+
+      if (data?.semestreActivo) {
+        setSemestre(data.semestreActivo);
+      }
+    } catch (err) {
+      console.error('Error actualizando dashboard:', err);
+    }
   };
 
   const handleCrearSemestre = async (datos) => {
     setLoadingModal(true);
+
     try {
       await apiCrearSemestre(datos);
       setSemestreModalAbierto(false);
@@ -205,9 +275,9 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
   const handleHitoGuardado = async () => {
     await refreshDashboard();
   };
+
   return (
     <div className="dashboard-pagina">
-      {/* ---- BARRA DE NAVEGACIÓN SUPERIOR ---- */}
       <nav className="dashboard-nav">
         <span className="nav-logo">EDU·STRATEGY</span>
 
@@ -229,6 +299,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
             <div className="avatar">{inicialesUsuario}</div>
             <span className="nombre-usuario">{nombreUsuario}</span>
           </div>
+
           <button
             className="btn-cerrar-sesion"
             onClick={() => {
@@ -250,7 +321,6 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
         />
       ) : (
         <main className="dashboard-contenido">
-          {/* ==== TARJETAS DE ESTADÍSTICAS ==== */}
           <div className="fila-estadisticas">
             <div className="tarjeta-stat">
               <div className="stat-etiqueta">ASIGNATURAS</div>
@@ -271,7 +341,6 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
             </div>
           </div>
 
-          {/* ==== SECCIÓN: GRÁFICA DE BARRAS ==== */}
           <div className="tarjeta-seccion">
             <div className="seccion-header">
               <h2 className="seccion-titulo">Rendimiento por asignatura</h2>
@@ -315,7 +384,6 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
             </div>
           </div>
 
-          {/* ==== SECCIÓN: TABLA DE ASIGNATURAS ==== */}
           <div className="tarjeta-seccion">
             <div className="seccion-header">
               <h2 className="seccion-titulo">Asignaturas</h2>
@@ -329,6 +397,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
               />
+
               <button className="btn-accion" onClick={handleAbrirCrear}>
                 + Crear asignatura
               </button>
@@ -345,6 +414,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
                   <th>ACCIONES</th>
                 </tr>
               </thead>
+
               <tbody>
                 {asignaturasFiltradas.map((asignatura) => (
                   <tr key={asignatura.id}>
@@ -354,18 +424,23 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
                         {asignatura.semestre}
                       </span>
                     </td>
+
                     <td>{asignatura.docente}</td>
+
                     <td>
                       <span className="badge-hitos">
                         {asignatura.hitos} hitos
                       </span>
                     </td>
+
                     <td>
                       <span className={claseNota(asignatura.nota)}>
                         {asignatura.nota.toFixed(1)}
                       </span>
                     </td>
+
                     <td>{asignatura.tiempo}h</td>
+
                     <td>
                       <div className="acciones-grupo">
                         <button
@@ -375,6 +450,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
                         >
                           🖊️
                         </button>
+
                         <button
                           className="btn-tabla"
                           title="Ver hitos"
@@ -383,6 +459,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
                         >
                           H
                         </button>
+
                         <button
                           className="btn-tabla eliminar"
                           title="Eliminar asignatura"
@@ -408,6 +485,7 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
                 No se encontraron asignaturas que coincidan con "{busqueda}"
               </p>
             )}
+
             <NuevaAsignaturaModal
               isOpen={modalAbierto}
               onClose={() => setModalAbierto(false)}
@@ -415,12 +493,14 @@ function Dashboard({ setPantalla, usuario, setUsuario }) {
               asignaturaEditando={asignaturaEditando}
               loading={loadingModal}
             />
+
             <NuevoSemestreModal
               isOpen={semestreModalAbierto}
               onClose={() => setSemestreModalAbierto(false)}
               onGuardar={handleCrearSemestre}
               loading={loadingModal}
             />
+
             <NuevoHitoModal
               isOpen={hitoModalAbierto}
               onClose={() => setHitoModalAbierto(false)}

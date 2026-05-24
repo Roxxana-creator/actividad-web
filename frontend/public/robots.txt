@@ -1,3 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt - EDU-STRATEGY
+# Permite indexación pública básica del sitio
+
 User-agent: *
-Disallow:
+Allow: /
