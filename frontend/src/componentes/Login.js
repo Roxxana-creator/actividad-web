@@ -14,8 +14,10 @@ function Login({ setPantalla, setUsuario }) {
     try {
       const { token, usuario } = await apiLogin(email, password);
       localStorage.setItem('edu_token', token);
-      setUsuario(usuario);
-      setPantalla('dashboard');
+      localStorage.setItem('edu_usuario', JSON.stringify(usuario));
+
+setUsuario(usuario);
+setPantalla('dashboard');
     } catch (err) {
       setError(err.message || 'Error al iniciar sesión.');
     } finally {

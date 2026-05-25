@@ -10,15 +10,24 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// Middlewares
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(express.json());
 
+// Rutas principales
 app.use('/api/salud', saludRutas);
 app.use('/api/autenticacion', autenticacionRutas);
 app.use('/api/usuario', usuarioRutas);
 
+// Puerto del servidor
 const PORT = process.env.PORT || 5000;
 
+// Inicialización del servidor
 app.listen(PORT, () => {
-  console.log(`Servidor en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor EDU-STRATEGY ejecutándose en el puerto ${PORT}`);
 });

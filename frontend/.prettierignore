@@ -1,3 +1,10 @@
+# =========================================
+# EDU-STRATEGY
+# Archivos ignorados por Prettier
+# =========================================
+
 node_modules
 build
 public
+dist
+coverage

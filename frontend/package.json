@@ -2,6 +2,16 @@
   "name": "edu-estrategy",
   "version": "0.1.0",
   "private": true,
+  "description": "Plataforma académica fullstack para la gestión y seguimiento estudiantil.",
+  "author": "Equipo EDU-STRATEGY",
+  "keywords": [
+    "react",
+    "nodejs",
+    "postgresql",
+    "fullstack",
+    "educacion",
+    "edustrategy"
+  ],
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -35,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.3"
